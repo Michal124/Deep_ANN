@@ -8,7 +8,7 @@ import numpy as np
 
 
 # =============================================================================
-# Activation functions
+#                           Activation functions
 # =============================================================================
 
 #Forward propagation
@@ -38,3 +38,20 @@ def softmax(Z):
 
 #Backpropagation
     
+
+# =============================================================================
+#                          Neural network functions
+# =============================================================================
+
+def initialize_parameters(L_dims):
+   
+    np.random.seed(3)
+    parameters = {}
+    L = len(L_dims)
+    
+    for l in range(1,L):
+        
+        parameters["W" + str(l)] = np.random.randn(L_dims[l], L_dims[l - 1]) * 0.01
+        parameters["b" + str(l)] = np.zeros((L_dims[l],1))
+    
+    return parameters
