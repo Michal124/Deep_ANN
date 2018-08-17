@@ -43,6 +43,7 @@ def softmax(Z):
 #                          Neural network functions
 # =============================================================================
 
+
 def initialize_parameters(L_dims):
    
     np.random.seed(3)
@@ -55,3 +56,17 @@ def initialize_parameters(L_dims):
         parameters["b" + str(l)] = np.zeros((L_dims[l],1))
     
     return parameters
+
+
+   
+    
+    
+def compute_cost(AL,Y):
+    
+    m = Y.shape()
+    
+    cost = (-1 / m) * np.sum(np.multiply(Y, np.log(AL)) + np.multiply(1 - Y, np.log(1 - AL)))
+    
+    cost = np.squeeze(cost)      
+    
+    return cost
