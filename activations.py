@@ -41,17 +41,17 @@ def sigmoid(Z):
 
 def relu_backward(dA,Z):
 
-    if Z < 0 :
-        return 0
-    elif Z >= 0:
-        return  dA * 1
+    dZ = np.array(dA, copy=True)      
+    dZ[Z <= 0] = 0
+    
+    return dZ
 
 def leaky_relu_backward(dA,Z):
 
-    if Z<0 :
-        return 0.01
-    elif Z >= 0:
-        return dA * 1
+    dZ = np.array(dA, copy=True)      
+    dZ[Z <= 0] = 0.01
+    
+    return dZ
 
 def tanh_backward(dA,Z):
     return dA * (1 - np.square(tanh(Z)))
