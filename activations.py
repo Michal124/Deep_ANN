@@ -30,8 +30,8 @@ def tanh(Z):
 def sigmoid(Z):
     return 1/(1 + np.exp(-Z))
 
-def softmax(Z):
-    return np.exp(Z)/np.sum(np.exp(Z))
+#def softmax(Z):
+ #   return np.exp(Z)/np.sum(np.exp(Z))
 
 
 # =============================================================================
@@ -39,26 +39,26 @@ def softmax(Z):
 # =============================================================================
     
 
-def relu_backward(Z):
+def relu_backward(dA,Z):
 
     if Z < 0 :
         return 0
     elif Z >= 0:
-        return 1
+        return return dA * 1
 
-def leaky_relu_backward(Z):
+def leaky_relu_backward(dA,Z):
 
     if Z<0 :
         return 0.01
     elif Z >= 0:
-        return 1
+        return dA * 1
 
-def tanh_backward(Z):
-    return 1 - np.square(tanh(Z))
+def tanh_backward(dA,Z):
+    return dA * (1 - np.square(tanh(Z)))
 
-def sigmoid_backward(Z):
-    return sigmoid(Z)*(1-sigmoid(Z))
+def sigmoid_backward(dA,Z):
+    return dA * (sigmoid(Z)*(1-sigmoid(Z)))
 
 
-def softmax_backward(Z):
-    return(Z)
+#def softmax_backward(Z):
+ #   return(Z)
