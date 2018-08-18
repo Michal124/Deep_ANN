@@ -39,6 +39,32 @@ def softmax(Z):
 #Backpropagation
     
 
+def relu_backward(Z):
+
+    if Z < 0 :
+        return 0
+    elif Z >= 0:
+        return 1
+
+
+def leaky_relu_backward(Z):
+
+    if Z<0 :
+        return 0.01
+    elif Z >= 0:
+        return 1
+
+def tanh_backward(Z):
+    return 1 - np.square(tanh(Z))
+
+def sigmoid_backward(Z):
+    return sigmoid(Z)*(1-sigmoid(Z))
+
+
+def softmax_backward(Z):
+    return(Z)
+    
+
 # =============================================================================
 #                          INITIALIZE PARAMETERS
 # =============================================================================
