@@ -5,66 +5,10 @@ Created on Tue Aug  7 16:15:12 2018
 """
 
 import numpy as np
+from activations import *
 
 
-# =============================================================================
-#                           Activation functions
-# =============================================================================
-
-#Forward propagation
-
-def relu(Z):
-    A = np.maximum(0,Z)
-    return A
-
-def leaky_realu(Z):
-    A = np.maximum(0.01,Z)
-    return A
-
-def tanh(Z):
-    A = (np.exp(Z)-np.exp(-Z))/(np.exp(Z)+np.exp(-Z))
-    return A
-
-# Last Layer functions
-
-def sigmoid(Z):
-    A = 1/(1 + np.exp(-Z))
-    return A
-
-def softmax(Z):
-    A = np.exp(Z)/np.sum(np.exp(Z))
-    return A
-
-
-#Backpropagation
     
-
-def relu_backward(Z):
-
-    if Z < 0 :
-        return 0
-    elif Z >= 0:
-        return 1
-
-
-def leaky_relu_backward(Z):
-
-    if Z<0 :
-        return 0.01
-    elif Z >= 0:
-        return 1
-
-def tanh_backward(Z):
-    return 1 - np.square(tanh(Z))
-
-def sigmoid_backward(Z):
-    return sigmoid(Z)*(1-sigmoid(Z))
-
-
-def softmax_backward(Z):
-    return(Z)
-    
-
 # =============================================================================
 #                          INITIALIZE PARAMETERS
 # =============================================================================
@@ -96,7 +40,7 @@ def initialize_parameters(L_dims):
 
 
 # =============================================================================
-#                        Forward propagation
+#                       Forward propagation module
 # =============================================================================
    
 def forward_propagation(A_prev,W,b,activation):
@@ -117,7 +61,7 @@ def forward_propagation(A_prev,W,b,activation):
         
     '''
     
-    #First step of neuron Computation (linear)
+    #First step of neuron computation (linear)
     Z = np.dot(W.A_prev) + b  
     
     #Second step of neuron computation (activation) 
@@ -138,12 +82,10 @@ def forward_propagation(A_prev,W,b,activation):
     
     
     # Create linear and activation cache
-    
-    linear_cache = (A_prev,W,B)
+    linear_cache = (A_prev,W,b)
     activation_cache = Z
     
     # Add both steps of computation to cache
-    
     cache = (linear_cache,activation_cache)
     return A, cache
 
@@ -152,7 +94,7 @@ def forward_model(X,parameters):
     
     caches = []
     A = X 
-    L = len(parameters)/2
+    L = len(parameters) // 2
     
     # compute hidden layers activation
     for l in (1,L):
@@ -175,9 +117,23 @@ def forward_model(X,parameters):
     return AL, caches
 
     
+
+# =============================================================================
+#                          Backpropagation module
+# =============================================================================
+
+
+
+# =============================================================================
+#                           Compute cost function
+# =============================================================================
+
 def compute_cost(AL,Y):
     
     '''
+    
+    Description : Compute-cross entropy cost
+    
     Input:
       * AL -- Activation value in last layer
       
@@ -187,7 +143,7 @@ def compute_cost(AL,Y):
       * cost -- result of cost function.
     '''
     
-    m = Y.shape()
+    m = Y.shape[1]
     
     cost = (-1 / m) * np.sum(np.multiply(Y, np.log(AL)) + np.multiply(1 - Y, np.log(1 - AL)))
     
