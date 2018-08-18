@@ -44,7 +44,7 @@ def relu_backward(dA,Z):
     if Z < 0 :
         return 0
     elif Z >= 0:
-        return return dA * 1
+        return  dA * 1
 
 def leaky_relu_backward(dA,Z):
 
