@@ -49,7 +49,7 @@ def initialize_parameters(L_dims):
 def forward_propagation_layer(A_prev,W,b,activation):
 
     '''
-    Description: Compute linear and activation functions for each layer.
+    Description: Compute linear and activation functions for selected layer.
     
     
     Input:
@@ -93,7 +93,26 @@ def forward_propagation_layer(A_prev,W,b,activation):
 
 
 
-def forward_model(X,parameters):
+def forward_model(X, parameters, hidden_A , output_A):
+    
+    '''
+    Description: Compute linear and activation functions for forward propagation model.
+    
+    
+    Input:
+        * X -- input features
+        * parameters -- learning parameters
+            * W -- weights
+            * b -- bias
+        * hidden_A -- activation function for hidden layers
+        * output_A -- activation function for output layer
+
+    Output:
+        * A -- activation function of next layer
+        * cache -- memory for parameters(A_prev,W,b) in each layer 
+        
+    '''
+    
     
     caches = []
     A = X 
@@ -105,14 +124,14 @@ def forward_model(X,parameters):
         A, cache = forward_propagation_layer(A_prev,
                                        parameters["W" + str(l)],
                                        parameters["b" + str(l)],
-                                       activation = "relu")
+                                       activation = hidden_A)
         caches.append(cache)
     
     # compute output layer activation
     AL, cache = forward_propagation_layer(A,
                                     parameters["W" + str(L)],
                                     parameters["b" + str(L)],
-                                    activation = "sigmoid")
+                                    activation = output_A)
     
     caches.append(cache)
     
@@ -154,7 +173,7 @@ def compute_cost(AL,Y):
 # =============================================================================
 
 
-def back_propagation_layer(dA, cache ,activation):
+def back_propagation_layer(dA, cache , activation):
     
     '''
     Description: Compute derivatives for selected layer
@@ -213,19 +232,21 @@ def back_propagation_layer(dA, cache ,activation):
     
 
 
-def backward_model(AL,Y,caches):
+def backward_model(AL, Y, caches, hidden_A, output_A):
     
     
     '''
-    Description: Compute derivatives of all layers
-    
+    Description: Compute derivatives for backpropagation model
     
     Input:
         * AL -- activation vector of last layer of forward propagation
         * Y -- output vector
         * caches -- list of caches contains
+        
                * linear cache - A_prev, W, b  ;
                * activation cache - Z .
+        * hidden_A -- activation function in hidden layer
+        * output_A -- activation function in output layer
                
 
     Output:
@@ -235,19 +256,19 @@ def backward_model(AL,Y,caches):
     
     grads = {}
     L = len(caches) 
-    m = AL.shape[1]
+    #m = AL.shape[1]
     Y = Y.reshape(AL.shape) 
 
     dAL = - (np.divide(Y, AL) - np.divide(1 - Y, 1 - AL))
     
     current_cache = caches[L-1]
-    grads["dA" + str(L)], grads["dW" + str(L)], grads["db" + str(L)] = back_propagation_layer(dAL, current_cache, "sigmoid")
+    grads["dA" + str(L)], grads["dW" + str(L)], grads["db" + str(L)] = back_propagation_layer(dAL, current_cache, output_A)
     ### END CODE HERE ###
     
     for l in reversed(range(L-1)):
 
         current_cache = caches[l]
-        dA_prev_temp, dW_temp, db_temp = back_propagation_layer(grads["dA" + str(L)], current_cache, "relu")
+        dA_prev_temp, dW_temp, db_temp = back_propagation_layer(grads["dA" + str(L)], current_cache, hidden_A)
         grads["dA" + str(l + 1)] = dA_prev_temp
         grads["dW" + str(l + 1)] = dW_temp
         grads["db" + str(l + 1)] = db_temp
